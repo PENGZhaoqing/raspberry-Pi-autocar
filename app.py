@@ -2,7 +2,7 @@
 from flask import Flask, render_template, request, abort
 from car import Car
 from config import WEB_PORT
-import AutoRun
+from AutoRun import AutoRun
 
 app = Flask(__name__)
 
@@ -39,6 +39,7 @@ def handle():
         elif operation == 'reset':
             car.reset()
         elif operation == 'auto':
+            print "hah"
             auto.run()
         else:
             abort(404)

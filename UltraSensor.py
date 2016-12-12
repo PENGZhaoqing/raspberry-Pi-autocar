@@ -29,6 +29,7 @@ class UltraSensor:
             distance = round(duration / 0.000058, 2)
         except:
             print "ultrasonic senser wrong"
+            distance=None
             gpio.cleanup(c.TRIG)
             gpio.cleanup(c.ECHO)
 

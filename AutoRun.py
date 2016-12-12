@@ -3,13 +3,14 @@ import RPi.GPIO as gpio
 from UltraSensor import UltraSensor
 import random as rand
 import time
+import threading
 
-
-class AutoRun:
+class AutoRun(threading.Thread):
     def __init__(self, car):
+        threading.Thread.__init__(self)
         self.sensor = UltraSensor()
         self.car = car
-        self.flag= True
+        self.flag = True
 
     def run(self):
         try:
@@ -32,5 +33,6 @@ class AutoRun:
             self.car.shutdown()
 
     def stop(self):
-        self.flag=False
+        if self.isAlive():
+            self.flag=False
         

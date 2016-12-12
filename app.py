@@ -39,8 +39,8 @@ def handle():
         elif operation == 'reset':
             car.reset()
         elif operation == 'auto_run':
-            auto.run()
-        elif opeartion == 'auto_stop':
+            auto.start()
+        elif operation == 'auto_stop':
             auto.stop()
         else:
             abort(404)

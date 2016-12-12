@@ -33,14 +33,15 @@ def handle():
         abort(404)  # 返回 404
     else:
         if operation in handle_map.iterkeys():
-            handle_map[operation](50)
+            handle_map[operation](80)
         elif operation == 'pause':
             car.stop()
         elif operation == 'reset':
             car.reset()
-        elif operation == 'auto':
-            print "hah"
+        elif operation == 'auto_run':
             auto.run()
+        elif opeartion == 'auto_stop':
+            auto.stop()
         else:
             abort(404)
     return 'ok'

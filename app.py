@@ -2,20 +2,22 @@
 from flask import Flask, render_template, request, abort
 from car import Car
 from config import WEB_PORT
+import AutoRun
 
 app = Flask(__name__)
 
 car = Car()
+auto = AutoRun(car)
 
 handle_map = {
     'forward': car.forward,
     'left': car.left,
     'right': car.right,
     'backward': car.backward,
-    'backward': car.backward,
-    'leftspin': car.leftspin,
-    'rightspin': car.rightspin,
+    'spinleft': car.leftspin,
+    'spinright': car.rightspin,
 }
+
 
 @app.route('/', methods=['GET'])
 def main_page():
@@ -35,7 +37,9 @@ def handle():
         elif operation == 'pause':
             car.stop()
         elif operation == 'reset':
-            car.shutdown()
+            car.reset()
+        elif operation == 'auto':
+            auto.run()
         else:
             abort(404)
     return 'ok'

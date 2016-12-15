@@ -6,7 +6,6 @@ import time
 
 class UltraSensor:
     def __init__(self):
-        gpio.setmode(gpio.BOARD)
         gpio.setup(c.TRIG, gpio.OUT)
         gpio.setup(c.ECHO, gpio.IN)
 

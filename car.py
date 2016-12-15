@@ -1,6 +1,6 @@
 import RPi.GPIO as gpio
 import config as c
-
+from UltraSensor import UltraSensor
 
 class Wheel(object):
     def __init__(self, F_PIN, B_PIN):
@@ -10,30 +10,35 @@ class Wheel(object):
         '''
         gpio.setup(F_PIN, gpio.OUT)
         gpio.setup(B_PIN, gpio.OUT)
-        self.F_p=gpio.PWM(F_PIN,50)
-        self.B_p=gpio.PWM(B_PIN,50)
-        self.state = None
-
+        self.F_pwm=gpio.PWM(F_PIN,50)
+        self.B_pwm=gpio.PWM(B_PIN,50)
+        self.state = "stop"
+        
     def forward(self, speed):
-        if self.state and self.state == "backward":
-            self.B_p.stop()
-        self.F_p.start(speed)
+        if self.state == "backward":
+            self.B_pwm.stop()
+        self.F_pwm.start(0)
+        self.F_pwm.ChangeDutyCycle(speed)
         self.state = "forward"
 
     def backward(self, speed):
-        if self.state and self.state == "forward":
-            self.F_p.stop()
-        self.B_p.start(speed)
+        if self.state == "forward":
+            self.F_pwm.stop()
+        self.B_pwm.start(0)
+        self.B_pwm.ChangeDutyCycle(speed)
         self.state = "backward"
 
     def stop(self):
-        self.F_p.stop()
-        self.B_p.stop()
-
+        if self.state== "forward":
+            self.F_pwm.stop()
+        if self.state== "backward":
+            self.B_pwm.stop()
+        self.state="stop"
 
 class Car(object):
     def __init__(self):
         gpio.setmode(gpio.BOARD)
+        self.sensor = UltraSensor()
         self.left_wheel = Wheel(c.LF_PIN, c.LB_PIN)
         self.right_wheel = Wheel(c.RF_PIN, c.RB_PIN)
 
@@ -68,7 +73,7 @@ class Car(object):
     def shutdown(self):
         self.stop()
         gpio.cleanup()
-
+    
     def reset(self):
         self.shutdown()
         self.__init__()
